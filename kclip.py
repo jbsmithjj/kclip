@@ -1,6 +1,6 @@
-"""Parses and normalizes data stored in Kindle clipping files. 
+"""Parses data stored in Kindle clipping files. 
 
-The function get_clippings_from_filename generates normalized Clipping objects
+The function get_clippings_from_filename generates Clipping objects
 from a Kindle clipping file (e.g. "My Clippings.txt"). 
 
 Supports clipping files created by Kindle Touch (4th generation)
@@ -129,7 +129,7 @@ def get_clippings_from_filename(filename):
     return     
 
 def _get_clipping_object_from_clip_strings(clip_strings, lineno):
-    """Parse a list of strings comprising a Kindle clipping into a normalized Clipping object, 
+    """Parse a list of strings comprising a Kindle clipping into a Clipping object, 
     or an UnparseableClipping object.
 
     Args:
@@ -462,8 +462,8 @@ def _get_datetime(s):
     return dt
 
 def main():
-    """Demonstrate the Kindle Clipping normalizer by processing the 
-    input file and printing the normalized clippings.""" 
+    """Demonstrate the Kindle Clipping parser by processing the 
+    input file and printing the resulting clipping obects.""" 
     
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument('-i','--input', help='Input file name', required=True)
