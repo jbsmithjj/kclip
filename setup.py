@@ -5,13 +5,13 @@ with open("README.rst", 'r') as f:
 
 setup(
    name='kclip',
-   version='1.0',
+   version='1.0.1',
    description='Parse Kindle Clippings text file',
    license="MIT",
    long_description=long_description,
    author='Jeremy B. Smith',
    author_email='jbsmithjj@gmail.com',
-   url="http://www.foopackage.com/",
+   url="https://github.com/jbsmithjj/kclip",
    py_modules=['kclip']
 )
  
