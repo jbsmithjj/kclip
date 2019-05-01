@@ -49,6 +49,28 @@ class Clipping(object):
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def get_kindle_strs(self):
+        """Returns a Kindle representation of this clipping."""
+        # Title/author
+        title_line = '%s (%s)' % (self.title, self.author)
+
+        # Metadata line
+        highlight_type = '- Your %s' % (self.clip_type.capitalize())
+        if (self.loc_range[0] == self.loc_range[1]):
+            location_string = 'Location %d' % (self.loc_range[0])
+        else:
+            location_string = 'Location %d-%d' % (self.loc_range[0], self.loc_range[1])
+        page_string = None
+        if (self.page is not None):
+            page_string = 'on Page %d' % self.page
+        date_string = self.datetime.strftime('%A, %B %d, %Y %I:%M:%S %p')
+
+        if (self.page is not None):
+            metadata_line = '%s %s | %s | Added on %s' % (highlight_type, page_string, location_string, date_string)
+        else:
+            metadata_line = '%s %s | Added on %s' % (highlight_type, location_string, date_string)
+
+        return (title_line, metadata_line, '\n', self.clip_text)
 
 class UnparseableClipping(object):
     """Represents a failed attempt to parse a Kindle clipping. 

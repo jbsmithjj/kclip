@@ -250,6 +250,16 @@ class KClipTestCase(unittest.TestCase):
             clipping = kclip._get_clipping_object_from_clip_strings(input_clip_str_list, 0)
             self.assertEqual(clipping.error.msg, expected_obj.error.msg, "UnparseableClipping's error message does not match expected value.")
 
+    def test_roundtrip_clipping_object_via_kindle_format(self):
+        clipping_values = (
+            kclip.Clipping(title='The Hunt for Red October (Jack Ryan)',author='Clancy, Tom',clip_type='highlight',page=35,loc_range=(679, 680),datetime=datetime.datetime(2014, 12, 12, 8, 51),clip_text='The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones\n') ,
+            kclip.Clipping(title='The Hunt for Red October (Jack Ryan)',author='Clancy, Tom',clip_type='highlight',page=None,loc_range=(679, 680),datetime=datetime.datetime(2014, 12, 12, 8, 51),clip_text='The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones\n') ,
+        )
+        for original in clipping_values:
+            kindle_strs = original.get_kindle_strs()
+            roundtrip = kclip._get_clipping_object_from_clip_strings(kindle_strs, 0)
+            self.assertEqual(original, roundtrip, "Roundtripped object does not match original.")
+
 
 class KCTokFromFileTestCase(unittest.TestCase):
     def test_get_clippings_from_filename_error(self):
@@ -273,6 +283,11 @@ The Hunt for Red October (Jack Ryan) (Clancy, Tom)
 
 The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones, had once served the Russian navy for the Czaritza Catherine. 
 ==========
+The Hunt for Red October (Jack Ryan) (Clancy, Tom)
+- Your Highlight on Page 35 | Location 679-680 | Added on Friday, December 12, 2014, 08:51 AM
+
+The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones
+==========
 """
 
 # The corresponded objects that would be parsed from the clipping_file_content.
@@ -280,6 +295,7 @@ The Americans, he knew, had long experience in naval warfare—their own greates
         kclip.Clipping(title='The Drunken Botanist',author='Stewart, Amy',clip_type='highlight',page=None,loc_range=(4868, 4872),datetime=datetime.datetime(2014, 12, 10, 18, 9),clip_text='The secret to getting the essential oil out of any plant in the mint family (including mint, basil, sage, and anise hyssop) is to bruise the leaves without crushing them. This expresses the oil from the modified trichomes, or tiny hairs, on the surface of the leaf without cluttering up the drink unnecessarily with chlorophyll. Get the most flavor out of the fresh leaves by spanking them—just place the leaf in the palm of one hand and clap your hands briskly once or twice. You’ll look like a pro and you’ll release fresh aromatics into the drink. \n'),
         kclip.UnparseableClipping(lineno=5,error=SyntaxError('Datetime not found in clipping metadata string'),original_lines=['The Drunken Botanist (Should result in unparseable clipping) (Stewart, Amy)\n', '- Your Highlight Location 5319-5319 | Added on Wednesday, December 10, 2014, 07:44\n', '\n', 'Reich, Lee, and Vicki Herzfeld Arlein. Uncommon Fruits for Every Garden. Portland, OR: Timber Press, 2008. \n']),
         kclip.Clipping(title='The Hunt for Red October (Jack Ryan)',author='Clancy, Tom',clip_type='highlight',page=None,loc_range=(675, 676),datetime=datetime.datetime(2014, 12, 12, 8, 51),clip_text='The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones, had once served the Russian navy for the Czaritza Catherine. \n'),        
+        kclip.Clipping(title='The Hunt for Red October (Jack Ryan)',author='Clancy, Tom',clip_type='highlight',page=35,loc_range=(679, 680),datetime=datetime.datetime(2014, 12, 12, 8, 51),clip_text='The Americans, he knew, had long experience in naval warfare—their own greatest fighter, Jones\n'),        
     ]
 
     def test_get_clippings_from_filename(self):
@@ -300,7 +316,6 @@ The Americans, he knew, had long experience in naval warfare—their own greates
         finally:
             os.remove(f.name)
         
-
 if __name__ == '__main__':
     unittest.main()
 
